@@ -5,6 +5,24 @@
 Đưa một AI agent từ `localhost:8000` lên một địa chỉ công khai mà người khác
 gọi được, có bảo mật, có giới hạn chi phí, và không sập khi bạn deploy bản mới.
 
+## GitHub Actions CI/CD
+
+Workflow `ci.yml` runs checkpoint tests and builds the Docker image on pushes
+and pull requests to `main`. On a push to `main`, it triggers Render only after
+both jobs pass, then checks the deployed `/health` endpoint.
+
+To enable the deployment steps, configure these in the GitHub repository under
+**Settings → Secrets and variables → Actions**:
+
+- Secret `RENDER_DEPLOY_HOOK_URL`: the Deploy Hook URL from the Render web
+  service settings. Keep the URL in GitHub Secrets; do not commit it.
+- Variable `PUBLIC_URL`: `https://day12-agent-unfc.onrender.com`.
+
+Render auto-deploy is disabled in `render.yaml` so a push cannot bypass the CI
+test and Docker build jobs. Sync the Blueprint after changing this setting.
+After adding the secret and variable, run `CI and Deploy` manually from the
+GitHub Actions tab, or let the next push to `main` trigger the pipeline.
+
 ---
 
 ## ⚠️ Bài Làm Cá Nhân
